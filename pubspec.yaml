@@ -1,0 +1,27 @@
+name: link_shortener_app
+description: "A new Flutter project."
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  cupertino_icons: ^1.0.8
+  equatable: ^2.0.8
+  flutter:
+    sdk: flutter
+  get: ^4.7.3
+  hive_ce: ^2.19.3
+  mocktail: ^1.0.4
+
+dev_dependencies:
+
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

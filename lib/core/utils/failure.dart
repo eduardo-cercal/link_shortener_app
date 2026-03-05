@@ -9,11 +9,15 @@ sealed class Failure extends Equatable {
   List<Object?> get props => [message];
 }
 
-class ServerFailure extends Failure {
-  const ServerFailure()
+class GenericFailure extends Failure {
+  const GenericFailure()
     : super('Algo deu errado! Tente novamente em alguns instantes');
 }
 
 class CreateFailure extends Failure {
   const CreateFailure() : super('Erro ao criar link simplificado');
+}
+
+class ValidLinkFailure extends Failure {
+  const ValidLinkFailure() : super('O texto enviado não é um link valido');
 }

@@ -2,12 +2,12 @@ import 'package:link_shortener_app/core/domain/usecase.dart';
 import 'package:link_shortener_app/features/home/domain/entities/alias_entity.dart';
 import 'package:link_shortener_app/features/home/domain/home_repository.dart';
 
-class GetAliasListUsecase implements FutureUsecase<List<AliasEntity>?, void> {
+class SaveAliasListUsecase implements FutureUsecase<void, List<AliasEntity>> {
   final HomeRepository repository;
 
-  GetAliasListUsecase(this.repository);
+  SaveAliasListUsecase(this.repository);
 
   @override
-  Future<List<AliasEntity>?> call([void input]) async =>
-      await repository.getAliasList();
+  Future<void> call([List<AliasEntity>? list]) async =>
+      await repository.saveAliasList(list!);
 }

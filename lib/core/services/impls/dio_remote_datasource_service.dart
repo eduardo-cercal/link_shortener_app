@@ -13,11 +13,9 @@ class DioRemoteDatasourceService implements RemoteDatasourceService {
     try {
       final response = await dio.post(baseUrl + path, data: body);
 
-      if (response.statusCode != createdStatusCode) {
-        throw CreateFailure();
-      }
-    } catch (e) {
-      throw ServerFailure();
+      return response.data;
+    } on Exception {
+      throw GenericFailure();
     }
   }
 }

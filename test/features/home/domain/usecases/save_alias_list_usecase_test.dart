@@ -1,27 +1,28 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:link_shortener_app/features/home/domain/entities/alias_entity.dart';
 import 'package:link_shortener_app/features/home/domain/home_repository.dart';
-import 'package:link_shortener_app/features/home/domain/usecases/get_alias_list_usecase.dart';
+import 'package:link_shortener_app/features/home/domain/usecases/save_alias_list_usecase.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../mocks.dart';
 
 void main() {
   late HomeRepository repository;
-  late GetAliasListUsecase sut;
+  late SaveAliasListUsecase sut;
   late List<AliasEntity> entityList;
 
   setUp(() {
     repository = MockHomeRepository();
-    sut = GetAliasListUsecase(repository);
+    sut = SaveAliasListUsecase(repository);
     entityList = mockEntityList();
+    registerFallbackValue(entityList);
   });
 
-  test('should return a ShortLink Entity when have a list saved', () async {
-    when(() => repository.getAliasList()).thenAnswer((_) async => entityList);
+  test('Should send a AliasEntityList when call', () async {
+    when(() => repository.saveAliasList(any())).thenAnswer((_) async {});
 
-    final result = await sut();
+    await sut(entityList);
 
-    expect(result, entityList);
+    verify(() => repository.saveAliasList(entityList)).called(1);
   });
 }

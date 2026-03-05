@@ -1,9 +1,10 @@
-import 'dart:convert';
-
-import 'package:link_shortener_app/features/home/data/datasources/home_local_datasource.dart';
-import 'package:link_shortener_app/features/home/data/datasources/home_remote_datasource.dart';
+import 'package:link_shortener_app/core/utils/failure.dart';
+import 'package:link_shortener_app/features/home/data/datasources/interfaces/home_local_datasource.dart';
+import 'package:link_shortener_app/features/home/data/datasources/interfaces/home_remote_datasource.dart';
 import 'package:link_shortener_app/features/home/data/models/alias_model.dart';
+import 'package:link_shortener_app/features/home/data/models/url_model.dart';
 import 'package:link_shortener_app/features/home/domain/entities/alias_entity.dart';
+import 'package:link_shortener_app/features/home/domain/entities/url_entity.dart';
 import 'package:link_shortener_app/features/home/domain/home_repository.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
@@ -13,13 +14,33 @@ class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl({required this.local, required this.remote});
 
   @override
-  Future<AliasEntity?> getAliasList() async {
+  Future<List<AliasEntity>?> getAliasList() async {
     final response = await local.getAliasList();
 
     if (response == null) {
       return null;
     }
-    final json = jsonDecode(response);
-    return AliasModel.fromJson(json);
+    return response
+        .map<AliasModel>((json) => AliasModel.fromJson(json))
+        .toList();
+  }
+
+  @override
+  Future<void> saveAliasList(List<AliasEntity> list) async =>
+      await local.saveAliasList(
+        list.map((entity) => AliasModel.fromEntity(entity).toJson()).toList(),
+      );
+
+  @override
+  Future<AliasEntity> createAlias(UrlEntity url) async {
+    try {
+      final result = await remote.createAlias(
+        UrlModel.fromEntity(url).toJson(),
+      );
+
+      return AliasModel.fromJson(result);
+    } on Failure {
+      rethrow;
+    }
   }
 }

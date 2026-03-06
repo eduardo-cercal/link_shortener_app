@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:link_shortener_app/core/data/response_model.dart';
 import 'package:link_shortener_app/core/services/impls/dio_remote_datasource_service.dart';
 import 'package:link_shortener_app/core/services/interfaces/remote_datasource_service.dart';
 import 'package:link_shortener_app/core/utils/constants.dart';
@@ -16,12 +17,16 @@ void main() {
   late RemoteDatasourceService sut;
   late Map<String, dynamic> json;
   late Map<String, dynamic> body;
+  late ResponseModel model;
+
+  ResponseModel mockResponse() => ResponseModel(statusCode: 201, data: json);
 
   setUp(() {
     dio = MockDio();
     sut = DioRemoteDatasourceService(dio);
     json = mockJson();
     body = mockBody();
+    model = mockResponse();
   });
 
   group('post', () {
@@ -38,7 +43,7 @@ void main() {
 
         final result = await sut.post(path: aliasEndpoint, body: body);
 
-        expect(result, json);
+        expect(result, model);
 
         verify(
           () => dio.post(
